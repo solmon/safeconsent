@@ -9,74 +9,30 @@ const { Contract } = require('fabric-contract-api');
 class UserConsent extends Contract {
 
     async initLedger(ctx) {
-        console.info('============= START : Initialize Ledger ===========');
-        const cars = [
-            {
-                color: 'blue',
-                make: 'Toyota',
-                model: 'Prius',
-                owner: 'Tomoko',
-            },
-            {
-                color: 'red',
-                make: 'Ford',
-                model: 'Mustang',
-                owner: 'Brad',
-            },
-            {
-                color: 'green',
-                make: 'Hyundai',
-                model: 'Tucson',
-                owner: 'Jin Soo',
-            },
-            {
-                color: 'yellow',
-                make: 'Volkswagen',
-                model: 'Passat',
-                owner: 'Max',
-            },
-            {
-                color: 'black',
-                make: 'Tesla',
-                model: 'S',
-                owner: 'Adriana',
-            },
-            {
-                color: 'purple',
-                make: 'Peugeot',
-                model: '205',
-                owner: 'Michel',
-            },
-            {
-                color: 'white',
-                make: 'Chery',
-                model: 'S22L',
-                owner: 'Aarav',
-            },
-            {
-                color: 'violet',
-                make: 'Fiat',
-                model: 'Punto',
-                owner: 'Pari',
-            },
-            {
-                color: 'indigo',
-                make: 'Tata',
-                model: 'Nano',
-                owner: 'Valeria',
-            },
-            {
-                color: 'brown',
-                make: 'Holden',
-                model: 'Barina',
-                owner: 'Shotaro',
-            },
-        ];
+        console.info('============= START : Initialize Ledger for testing ===========');
 
-        for (let i = 0; i < cars.length; i++) {
-            cars[i].docType = 'car';
-            await ctx.stub.putState('CAR' + i, Buffer.from(JSON.stringify(cars[i])));
-            console.info('Added <--> ', cars[i]);
+        const apps = [
+            {
+                name: 'Remote Diagnosis',
+                ver: '1.0',
+                comdate: '01012001',
+                status: 'active',
+                decomdate: null
+            },
+            {
+                name: 'Remote Diagnosis',
+                ver: '1.0',
+                comdate: '01012001',
+                status: 'active',
+                decomdate: null
+            }
+        ];
+        
+
+        for (let i = 0; i < apps.length; i++) {
+            apps[i].docType = 'app';
+            await ctx.stub.putState('APP' + i, Buffer.from(JSON.stringify(apps[i])));
+            console.info('Added <--> ', apps[i]);
         }
         console.info('============= END : Initialize Ledger ===========');
     }
@@ -89,33 +45,33 @@ class UserConsent extends Contract {
     //UserApp registration
     //App
 
-    async queryCar(ctx, carNumber) {
-        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
-        if (!carAsBytes || carAsBytes.length === 0) {
-            throw new Error(`${carNumber} does not exist`);
+    async queryApp(ctx, appId) {
+        const appAsBytes = await ctx.stub.getState(appId); // get the app from chaincode state
+        if (!appAsBytes || appAsBytes.length === 0) {
+            throw new Error(`${appId} does not exist`);
         }
-        console.log(carAsBytes.toString());
-        return carAsBytes.toString();
+        console.log(appAsBytes.toString());
+        return appAsBytes.toString();
     }
 
-    async createCar(ctx, carNumber, make, model, color, owner) {
-        console.info('============= START : Create Car ===========');
+    async createApp(ctx, appId, name, ver, comdate, status) {
+        console.info('============= START : Create App ===========');
 
-        const car = {
-            color,
-            docType: 'car',
-            make,
-            model,
-            owner,
+        const app = {
+            name,
+            docType: 'app',
+            ver,
+            comdate,    
+            decomdate: null,
         };
 
-        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
-        console.info('============= END : Create Car ===========');
+        await ctx.stub.putState(appId, Buffer.from(JSON.stringify(app)));
+        console.info('============= END : Create App ===========');
     }
 
-    async queryAllCars(ctx) {
-        const startKey = 'CAR0';
-        const endKey = 'CAR999';
+    async queryAllApps(ctx) {
+        const startKey = 'APP0';
+        const endKey = 'APP999';
 
         const iterator = await ctx.stub.getStateByRange(startKey, endKey);
 
@@ -146,7 +102,7 @@ class UserConsent extends Contract {
         }
     }
 
-    async querySingleCar(ctx, key) {
+    async queryAppById(ctx, key) {
         console.log('Key is ' + key);
         const res = await ctx.stub.getState(key);
         if (res){
@@ -161,23 +117,23 @@ class UserConsent extends Contract {
             return JSON.stringify([{ key, Record }]);
         }
         else{
-            console.err('Did not find the car with carNo ' + key);
+            console.err('Did not find the app with appId ' + key);
             return [];
         }
     }
 
-    async changeCarOwner(ctx, carNumber, newOwner) {
-        console.info('============= START : changeCarOwner ===========');
+    async decommissionApp(ctx, appId) {
+        console.info('============= START : decommissionApp ===========');
 
-        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
-        if (!carAsBytes || carAsBytes.length === 0) {
-            throw new Error(`${carNumber} does not exist`);
+        const appAsBytes = await ctx.stub.getState(appId); 
+        if (!appAsBytes || appAsBytes.length === 0) {
+            throw new Error(`${appId} does not exist`);
         }
-        const car = JSON.parse(carAsBytes.toString());
-        car.owner = newOwner;
+        const app = JSON.parse(appAsBytes.toString());
+        app.status = 'inactive';
 
-        await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
-        console.info('============= END : changeCarOwner ===========');
+        await ctx.stub.putState(appId, Buffer.from(JSON.stringify(app)));
+        console.info('============= END : decommissionApp ===========');
     }
 
 }
