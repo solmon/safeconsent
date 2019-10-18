@@ -54,7 +54,7 @@ class UserConsent extends Contract {
         return appAsBytes.toString();
     }
 
-    async createApp(ctx, appId, name, ver, comdate, status) {
+    async createApp(ctx, appId, name, ver, comdate) {
         console.info('============= START : Create App ===========');
 
         const app = {
@@ -63,6 +63,7 @@ class UserConsent extends Contract {
             ver,
             comdate,    
             decomdate: null,
+            status: 'active'
         };
 
         await ctx.stub.putState(appId, Buffer.from(JSON.stringify(app)));

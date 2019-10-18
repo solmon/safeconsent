@@ -1,0 +1,73 @@
+{
+    "name": "safeconsent-network",
+    "version": "1.0.0",
+    "client": {
+        "organization": "app1",
+        "connection": {
+            "timeout": {
+                "peer": {
+                    "endorser": "300",
+                    "eventHub": "300",
+                    "eventReg": "300"
+                },
+                "orderer": "300"
+            }
+        }
+    },
+    "channels": {
+        "consentchannel": {
+            "orderers": [
+                "orderer.safeconsent.com"
+            ],
+            "peers": {
+                "peer0.app1.safeconsent.com": {},
+                "peer0.app2.safeconsent.com": {}
+            }
+        }
+    },
+    "organizations": {
+        "app1": {
+            "mspid": "app1MSP",
+            "peers": [
+                "peer0.app1.safeconsent.com"
+            ],
+            "certificateAuthorities": [
+                "ca.app1.safeconsent.com"
+            ]
+        },
+        "app2": {
+            "mspid": "app2MSP",
+            "peers": [
+                "peer0.app2.safeconsent.com"
+            ],
+            "certificateAuthorities": [
+                "ca.app2.safeconsent.com"
+            ]
+        }
+    },
+    "orderers": {
+        "orderer.safeconsent.com": {
+            "url": "grpc://localhost:17050"
+        }
+    },
+    "peers": {
+        "peer0.app1.safeconsent.com": {
+            "url": "grpc://localhost:17051",
+            "eventUrl": "grpc://localhost:17052"
+        },
+        "peer0.app2.safeconsent.com": {
+            "url": "grpc://localhost:17053",
+            "eventUrl": "grpc://localhost:17054"
+        }
+    },
+    "certificateAuthorities": {
+        "ca.app1.safeconsent.com": {
+            "url": "http://localhost:17055",
+            "caName": "ca.app1.safeconsent.com"
+        },
+        "ca.app2.safeconsent.com": {
+            "url": "http://localhost:17056",
+            "caName": "ca.app2.safeconsent.com"
+        }
+    }
+}
