@@ -4,7 +4,7 @@
 
 'use strict';
 
-const SafeConsent = require('./lib/safecon');
+const safeConsentContract = require('./lib/safeconsentcontract.js');
+const appMgmtContract = require('./lib/appmgmt.js')
 
-module.exports.SafeConsent = SafeConsent;
-module.exports.contracts = [ SafeConsent ];
+module.exports.contracts = [ safeConsentContract, appMgmtContract ];

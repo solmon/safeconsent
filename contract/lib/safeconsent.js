@@ -1,7 +1,7 @@
 'use strict';
 
 // Utility class for ledger Consent
-const Consent = require('./../ledger-api/Consent.js');
+const Consent = require('./../ledger-api/consent.js');
 
 // Enumerate Consent state values
 const cpaction = {
