@@ -6,7 +6,7 @@
 
 const { Contract } = require('fabric-contract-api');
 
-class UserConsent extends Contract {
+class AppMgmt extends Contract {
 
     async initLedger(ctx) {
         console.info('============= START : Initialize Ledger for testing ===========');
@@ -36,15 +36,7 @@ class UserConsent extends Contract {
         }
         console.info('============= END : Initialize Ledger ===========');
     }
-
-    //App Functions
-    //Register New App
-    //Register App-User
-    // 
-
-    //UserApp registration
-    //App
-
+    
     async queryApp(ctx, appId) {
         const appAsBytes = await ctx.stub.getState(appId); // get the app from chaincode state
         if (!appAsBytes || appAsBytes.length === 0) {
@@ -139,4 +131,4 @@ class UserConsent extends Contract {
 
 }
 
-module.exports = UserConsent;
+module.exports = AppMgmt;

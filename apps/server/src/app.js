@@ -14,24 +14,10 @@ app.use(cors());
 
 app.post('/createApp', (req, res) => {
     console.log(req.body);
-
     network.createApp(req.body.appId, req.body.name, req.body.ver, req.body.comdate)
                 .then((response) => {
                     res.send(response);
-                });
-    /*            
-    network.queryAllCars()
-        .then((response) => {
-            console.log(response);
-            let carsRecord = JSON.parse(response);
-            let numCars = carsRecord.length;
-            let newKey = 'CAR' + numCars;
-            network.createCar(newKey, req.body.make, req.body.model, req.body.color, req.body.owner)
-                .then((response) => {
-                    res.send(response);
-                });
-        });
-    */
+    });    
 });
 
 /*
